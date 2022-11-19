@@ -15,7 +15,7 @@ class MongoTable:
     def save(self):
         record  = {
             k: v for k, v in self.__dict__.items()
-            if not k.startswith('_') and v
+            if not k.startswith('_')
         }
         key = list(record.keys())[0] # --- O primeiro campo é a chave
         self._collection.update_one(
