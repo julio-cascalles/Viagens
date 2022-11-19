@@ -5,7 +5,7 @@ class Hotel(MongoTable):
     def __init__(self, nome: str, cidade: str, estrelas: int, tamanho: int):
         self.nome = nome
         self.cidade = cidade
-        self.diaria = 50 * estrelas
+        self.diaria = 50.00 * estrelas
         self.quartos = [{}] * tamanho
         self._status = lambda s, h: {'status': s, 'hospede': h}
         super().__init__()
@@ -26,4 +26,4 @@ class Hotel(MongoTable):
         self.quarto[quarto] = self._status('ocupado', hospede)
 
     def check_out(self, quarto: int):
-        self.quartos[quarto] = ''
+        self.quartos[quarto] = {}
