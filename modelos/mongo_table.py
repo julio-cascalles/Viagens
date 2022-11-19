@@ -9,7 +9,7 @@ class MongoTable:
         table_name = self.__class__.__name__
         if not self._db:
             conn = MongoClient('mongodb://localhost:27017/')
-            self._db = conn['fome_DQ']
+            self._db = conn['viagens']
         self._collection = self._db.get_collection(table_name)
 
     def save(self):
