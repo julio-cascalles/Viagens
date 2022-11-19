@@ -13,7 +13,10 @@ class MongoTable:
         self._collection = self._db.get_collection(table_name)
 
     def save(self):
-        record  = self.__data()
+        record  = {
+            k: str(v) for k, v in self.__dict__.items()
+            if not k.startswith('_') and v
+        }
         key = list(record.keys())[0] # --- O primeiro campo é a chave
         self._collection.update_one(
             {key: record[key]},
@@ -21,11 +24,9 @@ class MongoTable:
             upsert=True
         )
 
-    def __data(self) -> dict:
-        return {
-            k: str(v) for k, v in self.__dict__.items()
-            if not k.startswith('_') and v
-        }
-
-    def find(self) -> list:
-        return list(self._collection.find(filter=self.__data()))
+    @classmethod
+    def find(cls, **args) -> list:
+        return [
+            cls(**rec)
+            for rec in self._collection.find(filter=args)
+        ]
