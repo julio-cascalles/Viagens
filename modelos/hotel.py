@@ -1,4 +1,5 @@
 from modelos.mongo_table import MongoTable
+from modelos import parametros
 
 
 class Hotel(MongoTable):

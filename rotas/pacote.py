@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from modelos.reserva import Reserva
+from modelos.parametros import Reserva
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
 
