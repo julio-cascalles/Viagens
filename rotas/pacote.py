@@ -1,26 +1,28 @@
 from fastapi import APIRouter
+from modelos.reserva import Reserva
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
 
 
 router = APIRouter()
 
-@router.get('/pacote/reserva/{cidade}/{hotel}/{hospede}/{passeios}')
-def fazer_reserva(cidade: str, hotel: str, hospede: str, passeios: str):
+@router.post('/pacote/reserva')
+def fazer_reserva(dados: Reserva):
     encontrados = sorted(Passeio.find(
-        cidade=cidade,
-        nome={'$in': passeios.split(',')}
+        cidade=dados.cidade,
+        nome={'$in': dados.passeios.split(',')}
     ), key = lambda p: p.dia_semana)
     if not encontrados:
         raise Exception('Nenhum passeio encontrado com essas características.')
-    hotel = Hotel.find(nome=hotel, cidade=cidade)
-    quarto = hotel.reserva(hospede) if hotel else -1
+    hotel = Hotel.find(nome=dados.hotel, cidade=dados.cidade)
+    quarto = hotel.reserva(dados.hospede) if hotel else -1
     if quarto == -1:
         raise Exception('Não foi possível fazer a reserva nesse hotel.')
     Hospede(
-        nome=hospede, passeios=encontrados,
-        hotel=hotel, quarto=quarto
+        nome=dados.hospede, quarto=quarto
+        passeios=encontrados, hotel=hotel, 
     ).save()
+    return f'Quarto {quarto} reservado para o hóspede'
 
 @router.get('/pacote/consumir/{hospede}')
 def consumir_pacote(hospede: str):
