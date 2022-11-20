@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from modelos.passeio import DIAS_SEMANA
 
 

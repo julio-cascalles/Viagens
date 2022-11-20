@@ -1,16 +1,18 @@
-import os
+import json
 from pymongo import MongoClient
 
 
 class MongoTable:
     _db = None
+    _collection = None
 
-    def __init__(self):
-        table_name = self.__class__.__name__
-        if not self._db:
-            conn = MongoClient('mongodb://localhost:27017/')
-            self._db = conn['viagens']
-        self._collection = self._db.get_collection(table_name)
+    @classmethod
+    def config(cls):
+        if MongoTable._db is None:
+            conn = MongoClient('mongodb://localhost:27017/', connect=False)
+            MongoTable._db = conn['viagens']
+        cls._collection = MongoTable._db.get_collection(cls.__name__)
+        return cls._collection
 
     def save(self):
         record  = {
@@ -26,7 +28,4 @@ class MongoTable:
 
     @classmethod
     def find(cls, **args) -> list:
-        return [
-            cls(**rec)
-            for rec in self._collection.find(filter=args)
-        ]
+        return [cls(**o) for o in cls.config().find(filter=args)]

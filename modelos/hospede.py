@@ -7,15 +7,20 @@ STATUS_HOSPEDADO = 2
 
 
 class Hospede(MongoTable):
-    def __init__(self, nome: str, hotel: Hotel, quarto:int, passeios=[]):
+    def __init__(self, nome: str, hotel: Hotel, quarto:int, passeios=[], **args):
         self.nome = nome
+        if isinstance(hotel, str):
+            hotel = next(iter(Hotel.find(nome=hotel)))
         self._hotel = hotel
         self.hotel = hotel.nome
         self.quarto = quarto
         self.cidade = hotel.cidade
-        self.passeios = passeios
-        self.status = STATUS_RESERVA
-        super().__init__()
+        self.passeios = [
+            p.nome if hasattr(p, 'nome') else p
+            for p in passeios
+        ]
+        self.status = args.get('status', STATUS_RESERVA)
+        self.config()
 
     def passeio_realizado(self) -> str:
         """
@@ -25,10 +30,13 @@ class Hospede(MongoTable):
             self._hotel.check_out(self.quarto)
             self.status = STATUS_INATIVO
             self.save()
-            return ''
+            return 'deixando o hotel ***'
         if self.status != STATUS_HOSPEDADO:
             self._hotel.check_in(
                 hospede=self.nome,
                 quarto=self.quarto
             )
-        return self.passeios.pop(0)
+            self.status = STATUS_HOSPEDADO
+        proximo = self.passeios.pop(0)
+        self.save()
+        return proximo

@@ -1,31 +1,34 @@
 from modelos.mongo_table import MongoTable
 from modelos import parametros
 
+INFO_STATUS = lambda s, h: {'status': s, 'hospede': h}
+
 
 class Hotel(MongoTable):
-    def __init__(self, nome: str, cidade: str, estrelas: int, tamanho: int):
+    def __init__(self, nome: str, cidade: str, estrelas: int, tamanho: int, **args):
         self.nome = nome
         self.cidade = cidade
         self.diaria = 50.00 * estrelas
-        self.quartos = [{}] * tamanho
-        self._status = lambda s, h: {'status': s, 'hospede': h}
-        super().__init__()
+        self.quartos = args.get('quartos',  [{}] * tamanho)
+        self.estrelas = estrelas
+        self.tamanho = tamanho
+        self.config()
 
     def reserva(self, hospede: str) -> int:
         for i, ocupado in enumerate(self.quartos):
             if not ocupado:
-                self.quartos[i] = self._status('reserva', hospede)
-                return i
+                self.quartos[i] = INFO_STATUS('reserva', hospede)
                 self.save()
+                return i
         return -1
     
     def check_in(self, hospede: str, quarto: int):
         reserva = self.quartos[quarto]
-        if reserva != self._status('reserva', hospede):
+        if reserva != INFO_STATUS('reserva', hospede):
             raise Exception('Quarto {} não está reservado para {}.'.format(
                 quarto, hospede
             ))
-        self.quarto[quarto] = self._status('ocupado', hospede)
+        self.quartos[quarto] = INFO_STATUS('ocupado', hospede)
         self.save()
 
     def check_out(self, quarto: int):

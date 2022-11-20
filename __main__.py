@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
-from routes import pacote, pesquisas, novos
+from rotas  import pacote, pesquisas, novos
 
 
 def create_app():
