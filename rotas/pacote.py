@@ -14,11 +14,11 @@ def fazer_reserva(dados: Reserva):
         nome={'$in': dados.passeios.split(',')}
     ), key = lambda p: p._dia)
     if not encontrados:
-        raise Exception('Nenhum passeio encontrado com essas características.')
+        return 'Nenhum passeio encontrado com essas características.'
     hotel = next(iter(Hotel.find(nome=dados.hotel, cidade=dados.cidade)), None)
     quarto = hotel.reserva(dados.hospede) if hotel else -1
     if quarto == -1:
-        raise Exception('Não foi possível fazer a reserva nesse hotel.')
+        return 'Não foi possível fazer a reserva nesse hotel.'
     Hospede(
         nome=dados.hospede, quarto=quarto,
         passeios=encontrados, hotel=hotel, 
