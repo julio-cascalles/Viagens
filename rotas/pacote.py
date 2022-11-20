@@ -12,7 +12,7 @@ def fazer_reserva(dados: Reserva):
     encontrados = sorted(Passeio.find(
         cidade=dados.cidade,
         nome={'$in': dados.passeios.split(',')}
-    ), key = lambda p: p.dia_semana)
+    ), key = lambda p: p._dia)
     if not encontrados:
         raise Exception('Nenhum passeio encontrado com essas características.')
     hotel = next(iter(Hotel.find(nome=dados.hotel, cidade=dados.cidade)), None)
