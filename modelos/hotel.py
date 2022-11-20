@@ -1,5 +1,4 @@
 from modelos.mongo_table import MongoTable
-from modelos import parametros
 
 INFO_STATUS = lambda s, h: {'status': s, 'hospede': h}
 
