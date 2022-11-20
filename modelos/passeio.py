@@ -10,7 +10,6 @@ class Passeio(MongoTable):
         self.cidade = cidade
         self.dia_semana = dia_semana.lower()
         self._dia = DIAS_SEMANA.index(self.dia_semana)
-        self.config()
 
     def disponivel(self, data: str) -> bool:
         if not data:

@@ -20,7 +20,6 @@ class Hospede(MongoTable):
             for p in passeios
         ]
         self.status = args.get('status', STATUS_RESERVA)
-        self.config()
 
     def passeio_realizado(self) -> str:
         """

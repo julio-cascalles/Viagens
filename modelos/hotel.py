@@ -12,7 +12,6 @@ class Hotel(MongoTable):
         self.quartos = args.get('quartos',  [{}] * tamanho)
         self.estrelas = estrelas
         self.tamanho = tamanho
-        self.config()
 
     def reserva(self, hospede: str) -> int:
         for i, ocupado in enumerate(self.quartos):
