@@ -16,7 +16,4 @@ class Passeio(MongoTable):
         if not data:
             return True
         data = datetime.strptime(data, '%d-%m-%Y')
-        print('='*50)
-        print(DIAS_SEMANA[data.weekday()])
-        print('-'*50)
         return self._dia == data.weekday()
