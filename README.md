@@ -13,6 +13,8 @@ O objetivo dessa API é simular uma agência de viagens, onde será possível:
 * Cadastrar novos hotéis;
 * Cadastrar novos passeios;
 
+![Endpoints da API](assets/Viagens_API.png)
+
 ## Regras
 > Hotel
 * Só podem ser feita uma reserva se houver vaga no hotel;
@@ -47,4 +49,4 @@ O objetivo dessa API é simular uma agência de viagens, onde será possível:
     - uvicorn
 
 ## Testes unitários
-`Ainda não disponíveis no projeto...`
+`Os testes ainda não estão disponíveis no projeto...`

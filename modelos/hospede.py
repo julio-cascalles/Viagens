@@ -10,7 +10,7 @@ class Hospede(MongoTable):
     def __init__(self, nome: str, hotel: Hotel, quarto:int, passeios=[], **args):
         self.nome = nome
         if isinstance(hotel, str):
-            hotel = next(iter(Hotel.find(nome=hotel)))
+            hotel = Hotel.find(nome=hotel)[0]
         self._hotel = hotel
         self.hotel = hotel.nome
         self.quarto = quarto
