@@ -49,4 +49,18 @@ O objetivo dessa API é simular uma agência de viagens, onde será possível:
     - uvicorn
 
 ## Testes unitários
-`Os testes ainda não estão disponíveis no projeto...`
+![Roteiro de testes](assets/testes_viagens.png)
+Os seguintes testes foram realizados:
+* Novo Hotel
+* Novos Passeios
+* Listar Hotel
+* Listar Passeios
+* Passeios por Data
+* Fazer Reserva
+* Consumir Pacote
+> Os dados utilizados nos testes estão em testes/const.py
+
+Foram testados...
+* O retorno de sucesso (status code == 200)
+* O valor esperado (nome do hotel, nome do passeio...)
+
