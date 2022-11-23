@@ -1,17 +1,27 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from modelos import parametros
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
+from rotas.enderecos import (
+    NOVO_HOTEL, NOVO_PASSEIO,
+    SUCESSO_HOTEL, SUCESSO_PASSEIO
+)
 
 
 router = APIRouter()
 
-@router.put('/novo/hotel')
+@router.put(NOVO_HOTEL)
 def novo_hotel(dados: parametros.Hotel):
-    Hotel(**dados.__dict__).save()
-    return 'Hotel gravado'
+    try:
+        Hotel(**dados.__dict__).save()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=e.errors())
+    return SUCESSO_HOTEL
 
-@router.put('/novo/passeio')
+@router.put(NOVO_PASSEIO)
 def novo_passeio(dados: parametros.Passeio):
-    Passeio(**dados.__dict__).save()
-    return 'Passeio gravado'
+    try:
+        Passeio(**dados.__dict__).save()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=e.errors())
+    return SUCESSO_PASSEIO

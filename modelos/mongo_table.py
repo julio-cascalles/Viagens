@@ -1,12 +1,10 @@
-from pymongo import MongoClient
-
-
 class MongoTable:
     _db = None
 
     @classmethod
     def collection(cls):
         if MongoTable._db is None:
+            from pymongo import MongoClient
             conn = MongoClient('mongodb://localhost:27017/', connect=False)
             MongoTable._db = conn['viagens']
         return MongoTable._db.get_collection(cls.__name__)
