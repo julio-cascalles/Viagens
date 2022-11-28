@@ -17,16 +17,15 @@ O objetivo dessa API é simular uma agência de viagens, onde será possível:
 
 ## Regras
 > Hotel
-* Só podem ser feita uma reserva se houver vaga no hotel;
-* Check-in: Só pode ser feito se houver reserva para o hóspede;
+* Só pode ser feita uma reserva se houver vaga no hotel;
+* Check-in: Só ocorre se houver reserva para o hóspede;
 * Valor da diária: Calculado pela classificação em `estrelas` do hotel;
 * Tamanho do hotel: Determina o número de quartos;
 
 > Passeio
-* Só pode ser feito num determinado dia da semana
+* Acontece num determinado dia da semana;
 * Os dias da semana devem ser um desses:
     - seg, ter, qua, qui, sex, sab ou dom
-* Os passeios de um hóspede são ordenados por dia da semana
 * O formato da data (quando houver) deve ser _dd-mm--yyyy_
 
 > Pacote
@@ -40,6 +39,7 @@ O objetivo dessa API é simular uma agência de viagens, onde será possível:
 > Hóspede
 * Ao consumir o primeiro passeio, o hóspede dá entrada no hotel (check-in);
 * Ao consumir o último passeio, o hóspede deixa o hotel (check-out).
+* Os passeios de um hóspede são ordenados por dia da semana
 
 
 ## Banco de dados, ORM e frameworks...
