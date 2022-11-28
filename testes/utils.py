@@ -1,4 +1,14 @@
 class MockCollection:
+
+    FUNC = {
+        '$in': lambda c, v: c in v,
+        '$gt': lambda c, v: c > v,
+        '$gte' : lambda c, v: c >= v,
+        '$lt': lambda c, v: c < v,
+        '$lte' : lambda c, v: c <= v,
+        '$eq': lambda c, v: c == v
+    }  
+
     def __init__(self):
         self.__data = {}
 
@@ -7,17 +17,14 @@ class MockCollection:
         self.__data[key] = info['$set']
 
     def find(self, **filter):
-        filter = filter['filter']
-        def compara(registro):
-            for campo, expr in filter.items():
-                val = registro[campo]
-                if isinstance(expr, dict) and '$in' in expr:
-                    if val not in expr["$in"]:
-                        return False
-                elif val != expr:
+        TO_DICT = lambda x: x if isinstance(x, dict) else {'$eq': x}
+        def compare(rec):
+            for field, expr in filter['filter'].items():
+                curr = rec[field]
+                if not all(self.FUNC[k](curr, v) for k, v in TO_DICT(expr).items()):
                     return False
             return True
-        return [d for d in self.__data.values() if compara(d)]
+        return [d for d in self.__data.values() if compare(d)]
 
 
 class MockDatabase:

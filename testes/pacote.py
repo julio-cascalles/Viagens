@@ -15,6 +15,7 @@ def fazer_reserva(client):
         RESERVA_PACOTE,
         json=dados.dict()
     )
+    # [To-Do] : Testar outros códigos de retorno (400, 404, 406...)
     assert resp.status_code == 200
 
 def consumir_pacote(client):
