@@ -9,7 +9,7 @@ O objetivo dessa API é simular uma agência de viagens, onde será possível:
 * Pesquisar os passeios por cidade;
 * Pesquisar os passeios por cidade e numa data específica;
 * Fazer reserva num hotel e comprar pacote de passeios;
-* Consumir o pacote de passeios, fazendo check-in e checkout automáticos quando iniciar e terminar o pacotec;
+* Consumir o pacote de passeios;
 * Cadastrar novos hotéis;
 * Cadastrar novos passeios;
 
@@ -36,6 +36,10 @@ O objetivo dessa API é simular uma agência de viagens, onde será possível:
 * Se o hotel não for encontrado ou se não houver vagas, a reserva não poderá ser feita;
 * Será retornado o número do quarto reservado para o hóspede
     - Os números de quarto vão de zero até o tamanho do hotel menos 1.
+
+> Hóspede
+* Ao consumir o primeiro passeio, o hóspede dá entrada no hotel (check-in);
+* Ao consumir o último passeio, o hóspede deixa o hotel (check-out).
 
 
 ## Banco de dados, ORM e frameworks...
