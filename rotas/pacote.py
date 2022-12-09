@@ -26,16 +26,10 @@ def fazer_reserva(dados: Reserva):
             status_code=400,
             detail='Não foi possível fazer a reserva nesse hotel.'
         )
-    try:
-        Hospede(
-            nome=dados.hospede, quarto=quarto,
-            passeios=encontrados, hotel=hotel, 
-        ).save()
-    except:
-        raise HTTPException(
-            status_code=406,
-            detail='Falha ao concluir a transação'
-        )
+    Hospede(
+        nome=dados.hospede, quarto=quarto,
+        passeios=encontrados, hotel=hotel, 
+    ).save()
     return f'Quarto {quarto} reservado para o hóspede'
 
 @router.get(CONSUMIR_PACOTE)
