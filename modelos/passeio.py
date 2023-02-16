@@ -1,18 +1,13 @@
 from datetime import datetime
+from modelos import base
+from modelos.base import DIAS_SEMANA
 from modelos.mongo_table import MongoTable
 
-DIAS_SEMANA = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 
-
-class Passeio(MongoTable):
-    def __init__(self, nome: str, cidade: str, dia_semana: str, **args):
-        self.nome = nome
-        self.cidade = cidade
-        self.dia_semana = dia_semana.lower()
-        self._dia = DIAS_SEMANA.index(self.dia_semana)
-
+class Passeio(MongoTable, base.Passeio):
     def disponivel(self, data: str) -> bool:
         if not data:
             return True
+        dia_atual = DIAS_SEMANA.index(self.dia_semana)
         data = datetime.strptime(data, '%d-%m-%Y')
-        return self._dia == data.weekday()
+        return dia_atual == data.weekday()

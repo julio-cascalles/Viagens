@@ -8,8 +8,8 @@ class MongoTable:
     def collection(cls):
         if MongoTable._db is None:
             from pymongo import MongoClient
-            conn = MongoClient(self.URL_HOST, connect=False)
-            MongoTable._db = conn[self.DATABASE_NAME]
+            conn = MongoClient(cls.URL_HOST, connect=False)
+            MongoTable._db = conn[cls.DATABASE_NAME]
         return MongoTable._db.get_collection(cls.__name__)
 
     def save(self, key_field_index: int = 0):
