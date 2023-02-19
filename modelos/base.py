@@ -1,5 +1,7 @@
 from pydantic import BaseModel, validator
-from modelos.passeio import DIAS_SEMANA
+
+DIAS_SEMANA = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
+STATUS_INATIVO, STATUS_RESERVA, STATUS_HOSPEDADO = 0, 1, 2
 
 
 class Reserva(BaseModel):
@@ -9,11 +11,19 @@ class Reserva(BaseModel):
     passeios: str
 
 
+class Hospede(BaseModel):
+    nome: str
+    hotel: str
+    quarto: int
+    passeios: list
+    status: int = STATUS_RESERVA
+
+
 class Hotel(BaseModel):
     nome: str
-    estrelas : int
     cidade: str
     tamanho: int
+    quartos: list = []
 
 
 class Passeio(BaseModel):
@@ -28,4 +38,3 @@ class Passeio(BaseModel):
         if dia not in DIAS_SEMANA:
             raise ValueError(f'{dia} não é um dia da semana válido.')
         return dia
-    

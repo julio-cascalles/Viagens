@@ -1,5 +1,5 @@
 from rotas.enderecos import RESERVA_PACOTE, CONSUMIR_PACOTE
-from modelos.parametros import Reserva
+from modelos.base import Reserva
 from testes.const import (
     HOTEL_TESTE, CIDADE_TESTE, HOSPEDE_TESTE,
     ITEM_PASSEIO_PARQUE, PASSEIOS_TESTE, 
@@ -15,7 +15,6 @@ def fazer_reserva(client):
         RESERVA_PACOTE,
         json=dados.dict()
     )
-    # [To-Do] : Testar outros códigos de retorno (400, 404, 406...)
     assert resp.status_code == 200
 
 def consumir_pacote(client):

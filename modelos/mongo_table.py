@@ -1,20 +1,23 @@
 class MongoTable:
+    URL_HOST = 'mongodb://localhost:27017/'
+    DATABASE_NAME = ''
+
     _db = None
 
     @classmethod
     def collection(cls):
         if MongoTable._db is None:
             from pymongo import MongoClient
-            conn = MongoClient('mongodb://localhost:27017/', connect=False)
-            MongoTable._db = conn['viagens']
+            conn = MongoClient(cls.URL_HOST, connect=False)
+            MongoTable._db = conn[cls.DATABASE_NAME]
         return MongoTable._db.get_collection(cls.__name__)
 
-    def save(self):
+    def save(self, key_field_index: int = 0):
         record  = {
             k: v for k, v in self.__dict__.items()
             if not k.startswith('_')
         }
-        key = list(record.keys())[0] # --- O primeiro campo é a chave
+        key = list(record.keys())[key_field_index]
         self.collection().update_one(
             {key: record[key]},
             {'$set': record},

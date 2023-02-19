@@ -1,16 +1,14 @@
+from modelos import base
 from modelos.mongo_table import MongoTable
 
 INFO_STATUS = lambda s, h: {'status': s, 'hospede': h}
 
 
-class Hotel(MongoTable):
-    def __init__(self, nome: str, cidade: str, estrelas: int, tamanho: int, **args):
-        self.nome = nome
-        self.cidade = cidade
-        self.diaria = 50.00 * estrelas
-        self.quartos = args.get('quartos',  [{}] * tamanho)
-        self.estrelas = estrelas
-        self.tamanho = tamanho
+class Hotel(MongoTable, base.Hotel):
+    def __init__(self, **args):
+        super().__init__(**args)
+        quartos = args.get('quartos', [])
+        self.quartos = quartos or [{}] * self.tamanho
 
     def reserva(self, hospede: str) -> int:
         for i, ocupado in enumerate(self.quartos):
@@ -19,7 +17,7 @@ class Hotel(MongoTable):
                 self.save()
                 return i
         return -1
-    
+
     def check_in(self, hospede: str, quarto: int):
         reserva = self.quartos[quarto]
         if reserva != INFO_STATUS('reserva', hospede):

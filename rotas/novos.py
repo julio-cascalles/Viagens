@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from modelos import parametros
+from modelos import base
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
 from rotas.enderecos import (
@@ -11,7 +11,7 @@ from rotas.enderecos import (
 router = APIRouter()
 
 @router.put(NOVO_HOTEL)
-def novo_hotel(dados: parametros.Hotel):
+def novo_hotel(dados: base.Hotel):
     try:
         Hotel(**dados.__dict__).save()
     except Exception as e:
@@ -19,7 +19,7 @@ def novo_hotel(dados: parametros.Hotel):
     return SUCESSO_HOTEL
 
 @router.put(NOVO_PASSEIO)
-def novo_passeio(dados: parametros.Passeio):
+def novo_passeio(dados: base.Passeio):
     try:
         Passeio(**dados.__dict__).save()
     except Exception as e:

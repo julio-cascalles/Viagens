@@ -13,7 +13,11 @@ from testes.pesquisas import (
 client = TestClient(
     create_app()
 )
-MongoTable._db = MockDatabase()
+# ---------------------------------
+# Comente a linha abaixo(*) caso queira gravar os testes no B.D.:
+MongoTable._db = MockDatabase()  # <<<---- (*)
+MongoTable.DATABASE_NAME = 'teste'
+# ---------------------------------
 
 def test_novo_hotel():
     novo_hotel(client)

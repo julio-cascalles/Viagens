@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from modelos.parametros import Reserva
+from modelos.base import Reserva, DIAS_SEMANA
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
 from modelos.hospede import Hospede
@@ -13,7 +13,7 @@ def fazer_reserva(dados: Reserva):
     encontrados = sorted(Passeio.find(
         cidade=dados.cidade,
         nome={'$in': dados.passeios.split(',')}
-    ), key = lambda p: p._dia)
+    ), key = lambda p: DIAS_SEMANA.index(p.dia_semana))
     if not encontrados:
         raise HTTPException(
             status_code=404,
@@ -26,30 +26,25 @@ def fazer_reserva(dados: Reserva):
             status_code=400,
             detail='Não foi possível fazer a reserva nesse hotel.'
         )
-    try:
-        Hospede(
-            nome=dados.hospede, quarto=quarto,
-            passeios=encontrados, hotel=hotel, 
-        ).save()
-    except:
-        raise HTTPException(
-            status_code=406,
-            detail='Falha ao concluir a transação'
-        )
-    return f'Quarto {quarto} reservado para o hóspede'
+    Hospede(
+        nome=dados.hospede, quarto=quarto,
+        passeios=[p.nome for p in encontrados],
+        hotel=hotel.nome, 
+    ).save()
+    return f'Quarto {quarto} reservado com sucesso para {dados.hospede}'
 
 @router.get(CONSUMIR_PACOTE)
 def consumir_pacote(hospede: str):
     """
     Simula o hóspede consumindo seu pacote de passeios
     """
-    try:
-        return '{} > {}.'.format(
-            hospede,
-            Hospede.find(nome=hospede)[0].passeio_realizado()
-        )
-    except:
+    encontrado = Hospede.find(nome=hospede)
+    if not encontrado:
         raise HTTPException(
             status_code=404,
-            detail='Hóspede não encontrado.'
+            detail=f'Hóspede "{hospede}" não encontrado.'
         )
+    hospede = encontrado[0]
+    return '{} > {}.'.format(
+        hospede.nome, hospede.passeio_realizado()
+    )
