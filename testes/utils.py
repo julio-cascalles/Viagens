@@ -16,10 +16,10 @@ class MockCollection:
         key = list(filter.values())[0]
         self.__data[key] = info['$set']
 
-    def find(self, **filter):
+    def find(self, **args):
         TO_DICT = lambda x: x if isinstance(x, dict) else {'$eq': x}
         def compare(rec):
-            for field, expr in filter['filter'].items():
+            for field, expr in args['filter'].items():
                 curr = rec[field]
                 if not all(self.FUNC[k](curr, v) for k, v in TO_DICT(expr).items()):
                     return False

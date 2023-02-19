@@ -19,7 +19,6 @@ O objetivo dessa API é simular uma agência de viagens, onde será possível:
 > Hotel
 * Só pode ser feita uma reserva se houver vaga no hotel;
 * Check-in: Só ocorre se houver reserva para o hóspede;
-* Valor da diária: Calculado pela classificação em `estrelas` do hotel;
 * Tamanho do hotel: Determina o número de quartos;
 
 > Passeio

@@ -21,7 +21,6 @@ class Hospede(BaseModel):
 
 class Hotel(BaseModel):
     nome: str
-    estrelas : int
     cidade: str
     tamanho: int
     quartos: list = []
