@@ -30,6 +30,7 @@ class Passeio(BaseModel):
     nome: str
     cidade: str
     dia_semana: str
+    historico: dict={}
 
     @field_validator("dia_semana")
     @classmethod

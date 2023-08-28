@@ -28,23 +28,34 @@ def fazer_reserva(dados: Reserva):
             detail='Nenhum passeio encontrado com essas características.'
         )
     hotel = next(iter(Hotel.find(nome=dados.hotel, cidade=dados.cidade)), None)
-    quarto = hotel.reserva(dados.hospede) if hotel else -1
-    if quarto == -1:
-        raise HTTPException(
-            status_code=400,
-            detail='Não foi possível fazer a reserva nesse hotel.'
-        )
-    Hospede(
-        nome=dados.hospede, quarto=quarto,
-        passeios=[p.nome for p in encontrados],
-        hotel=hotel.nome, 
-    ).save()
+    if hotel:
+        quarto = hotel.reserva(dados.hospede)
+        if quarto == -1:
+            erro = 'Não foi possível fazer a reserva nesse hotel.'
+        else:
+            outro_hotel = Hospede.hotel_atual(dados.hospede)
+            if outro_hotel:
+                erro = '{} já está hospedado em {}'.format(
+                    dados.hospede, outro_hotel
+                )
+            else:
+                Hospede(
+                    nome=dados.hospede, quarto=quarto,
+                    passeios=[p.nome for p in encontrados],
+                    hotel=hotel.nome, 
+                ).save()
+                erro = ''
+    else:
+        erro = 'Hotel não encontrado.'
+    if erro:
+        raise HTTPException(status_code=400, detail=erro)
     return f'Quarto {quarto} reservado com sucesso para {dados.hospede}'
 
 @router.post(CONSUMIR_PACOTE)
-def consumir_pacote(hospede: str):
+def consumir_pacote(hospede: str, realizar: int=1):
     """
     Simula o hóspede consumindo seu pacote de passeios
+    > Coloque `realizar` como 0 caso queira desistir do passeio
     """
     encontrado = Hospede.find(nome=hospede)
     if not encontrado:
@@ -54,5 +65,9 @@ def consumir_pacote(hospede: str):
         )
     hospede = encontrado[0]
     return FORMATO_RETORNO_CONSUMO.format(
-        hospede.nome, hospede.passeio_realizado()
+        hospede.nome, 
+        Passeio.grava_historico(
+            nome=hospede.proximo_passeio(),
+            hospede=hospede, cancelado=(realizar==0)
+        )
     )

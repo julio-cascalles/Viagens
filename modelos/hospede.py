@@ -5,7 +5,7 @@ from modelos.hotel import Hotel
 
 
 class Hospede(MongoTable, base.Hospede):
-    def passeio_realizado(self) -> str:
+    def proximo_passeio(self) -> str:
         """
         Primeiro procura o `hotel` do Hospede
         Depois retira um passeio da lista
@@ -20,13 +20,22 @@ class Hospede(MongoTable, base.Hospede):
             hotel.check_out(self.quarto)
             self.status = STATUS_INATIVO
             self.save()
-            return 'deixando o hotel ***'
+            return ''
         if self.status != STATUS_HOSPEDADO:
             hotel.check_in(
                 hospede=self.nome,
                 quarto=self.quarto
             )
             self.status = STATUS_HOSPEDADO
-        proximo = self.passeios.pop(0)
+        passeio = self.passeios.pop(0)
         self.save()
-        return proximo
+        return passeio
+
+    @classmethod
+    def hotel_atual(cls, nome: str) -> str:
+        encontrado = cls.find(nome=nome)
+        if encontrado:
+            hospede = encontrado[0]
+            if hospede.status == STATUS_HOSPEDADO:
+                return hospede.hotel
+        return ''
