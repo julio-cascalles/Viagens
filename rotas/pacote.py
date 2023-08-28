@@ -66,7 +66,7 @@ def consumir_pacote(hospede: str, realizar: int=1):
     hospede = encontrado[0]
     return FORMATO_RETORNO_CONSUMO.format(
         hospede.nome, 
-        Passeio.grava_historico(
+        Passeio.historico_gravado(
             nome=hospede.proximo_passeio(),
             hospede=hospede, cancelado=(realizar==0)
         )

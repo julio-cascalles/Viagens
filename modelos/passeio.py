@@ -13,12 +13,12 @@ class Passeio(MongoTable, base.Passeio):
         return dia_atual == data.weekday()
 
     @classmethod
-    def grava_historico(cls, **args) -> str:
+    def historico_gravado(cls, **args) -> str:
         hospede = args.pop('hospede').nome
         cancelado = args.pop('cancelado', False)
-        if not args.get('nome'):
-            return 'deixando o hotel ***'
         encontrado = cls.find(**args)
+        if not encontrado:
+            return 'deixando o hotel ***'
         passeio = encontrado[0]
         passeio.historico[hospede] = 'desistiu' if cancelado else 'realizou'
         passeio.save()
