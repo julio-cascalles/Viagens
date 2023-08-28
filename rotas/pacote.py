@@ -13,6 +13,11 @@ router = APIRouter()
 
 @router.post(RESERVA_PACOTE)
 def fazer_reserva(dados: Reserva):
+    """
+    **Observação**
+    O _hospede_ só passa a existir depois que faz a reserva.
+    Então **não existe** uma rota do tipo `novo/hospede`
+    """
     encontrados = sorted(Passeio.find(
         cidade=dados.cidade,
         nome={'$in': dados.passeios.split(',')}

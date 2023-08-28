@@ -1,6 +1,6 @@
 from pydantic import BaseModel, field_validator
 
-DIAS_SEMANA = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
+DIAS_SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab']
 STATUS_INATIVO, STATUS_RESERVA, STATUS_HOSPEDADO = 0, 1, 2
 
 

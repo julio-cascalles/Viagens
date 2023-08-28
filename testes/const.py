@@ -5,4 +5,3 @@ ITEM_PASSEIO_PARQUE = 'Parque das Cachoeiras'
 LISTA_PASSEIOS = [ITEM_PASSEIO_GRUTA,ITEM_PASSEIO_PARQUE]
 DIAS_PASSEIO = ['qui', 'ter']
 HOSPEDE_TESTE = 'Ana Conda' # https://www.anaconda.com/  :))
-FORMATO_RETORNO_CONSUMO = '{} > {}.'
