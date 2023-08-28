@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
-from rotas.enderecos import (
+from rotas.const import (
     LISTAR_HOTEIS,
     LISTAR_PASSEIOS,
     LISTAR_PASSEIOS_POR_DATA

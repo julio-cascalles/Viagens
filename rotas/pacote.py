@@ -3,7 +3,10 @@ from modelos.base import Reserva, DIAS_SEMANA
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
 from modelos.hospede import Hospede
-from rotas.enderecos import RESERVA_PACOTE, CONSUMIR_PACOTE
+from rotas.const import (
+    RESERVA_PACOTE, CONSUMIR_PACOTE,
+    FORMATO_RETORNO_CONSUMO
+)
 
 
 router = APIRouter()
@@ -33,7 +36,7 @@ def fazer_reserva(dados: Reserva):
     ).save()
     return f'Quarto {quarto} reservado com sucesso para {dados.hospede}'
 
-@router.get(CONSUMIR_PACOTE)
+@router.post(CONSUMIR_PACOTE)
 def consumir_pacote(hospede: str):
     """
     Simula o hóspede consumindo seu pacote de passeios
@@ -45,6 +48,6 @@ def consumir_pacote(hospede: str):
             detail=f'Hóspede "{hospede}" não encontrado.'
         )
     hospede = encontrado[0]
-    return '{} > {}.'.format(
+    return FORMATO_RETORNO_CONSUMO.format(
         hospede.nome, hospede.passeio_realizado()
     )

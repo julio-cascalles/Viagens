@@ -13,3 +13,5 @@ LISTAR_PASSEIOS_POR_DATA = '/pesquisas/listar_passeios/{cidade}/{data}'
 
 SUCESSO_HOTEL = 'Hotel gravado com sucesso!'
 SUCESSO_PASSEIO = 'Passeio gravado com sucesso!'
+
+FORMATO_RETORNO_CONSUMO = '{} > {}.'

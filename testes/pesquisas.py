@@ -1,4 +1,4 @@
-from rotas.enderecos import (
+from rotas.const import (
     LISTAR_HOTEIS,
     LISTAR_PASSEIOS,
     LISTAR_PASSEIOS_POR_DATA

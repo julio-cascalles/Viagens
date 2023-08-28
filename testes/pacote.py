@@ -1,8 +1,11 @@
-from rotas.enderecos import RESERVA_PACOTE, CONSUMIR_PACOTE
 from modelos.base import Reserva
 from testes.const import (
-    CIDADE_TESTE, ITEM_PASSEIO_PARQUE, LISTA_PASSEIOS,
-    FORMATO_RETORNO_CONSUMO, HOSPEDE_TESTE, HOTEL_TESTE
+    CIDADE_TESTE, HOSPEDE_TESTE, HOTEL_TESTE,
+    LISTA_PASSEIOS, ITEM_PASSEIO_PARQUE
+)
+from rotas.const import (
+    RESERVA_PACOTE, CONSUMIR_PACOTE,
+    FORMATO_RETORNO_CONSUMO
 )
 
 
@@ -18,7 +21,7 @@ def fazer_reserva(client):
     assert resp.status_code == 200
 
 def consumir_pacote(client):
-    resp = client.get(CONSUMIR_PACOTE.format(
+    resp = client.post(CONSUMIR_PACOTE.format(
         hospede=HOSPEDE_TESTE
     ))
     assert resp.status_code == 200

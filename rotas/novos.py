@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from modelos import base
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
-from rotas.enderecos import (
+from rotas.const import (
     NOVO_HOTEL, NOVO_PASSEIO,
     SUCESSO_HOTEL, SUCESSO_PASSEIO
 )

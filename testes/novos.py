@@ -1,4 +1,4 @@
-from rotas.enderecos import NOVO_HOTEL, NOVO_PASSEIO
+from rotas.const import NOVO_HOTEL, NOVO_PASSEIO
 from modelos import base
 from testes.const import (
     HOTEL_TESTE, CIDADE_TESTE,
