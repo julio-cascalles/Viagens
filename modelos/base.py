@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 DIAS_SEMANA = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom']
 STATUS_INATIVO, STATUS_RESERVA, STATUS_HOSPEDADO = 0, 1, 2
@@ -31,7 +31,7 @@ class Passeio(BaseModel):
     cidade: str
     dia_semana: str
 
-    @validator("dia_semana")
+    @field_validator("dia_semana")
     @classmethod
     def valida_dia(cls, dia):
         dia = dia.lower()

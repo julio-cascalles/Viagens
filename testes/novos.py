@@ -14,7 +14,7 @@ def novo_hotel(client):
     )
     resp = client.put(
         NOVO_HOTEL,
-        json=dados.dict()
+        json=dados.model_dump()
     )
     assert resp.status_code == 200
 
@@ -27,6 +27,6 @@ def novos_passeios(client):
         )
         resp = client.put(
             NOVO_PASSEIO,
-            json=dados.dict()
+            json=dados.model_dump()
         )
         assert resp.status_code == 200

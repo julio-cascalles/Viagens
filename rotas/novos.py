@@ -13,7 +13,7 @@ router = APIRouter()
 @router.put(NOVO_HOTEL)
 def novo_hotel(dados: base.Hotel):
     try:
-        Hotel(**dados.__dict__).save()
+        Hotel(**dados.model_dump()).save()
     except Exception as e:
         raise HTTPException(status_code=400, detail=e.errors())
     return SUCESSO_HOTEL
@@ -21,7 +21,7 @@ def novo_hotel(dados: base.Hotel):
 @router.put(NOVO_PASSEIO)
 def novo_passeio(dados: base.Passeio):
     try:
-        Passeio(**dados.__dict__).save()
+        Passeio(**dados.model_dump()).save()
     except Exception as e:
         raise HTTPException(status_code=400, detail=e.errors())
     return SUCESSO_PASSEIO
