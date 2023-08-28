@@ -18,7 +18,7 @@ class Passeio(MongoTable, base.Passeio):
         cancelado = args.pop('cancelado', False)
         encontrado = cls.find(**args)
         if not encontrado:
-            return 'deixando o hotel ***'
+            return 'não existem mais passeios **'
         passeio = encontrado[0]
         passeio.historico[hospede] = 'desistiu' if cancelado else 'realizou'
         passeio.save()
