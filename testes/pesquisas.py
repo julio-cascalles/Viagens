@@ -5,29 +5,23 @@ from rotas.const import (
 )
 from testes.const import (
     HOTEL_TESTE, ITEM_PASSEIO_GRUTA,
-    CIDADE_TESTE, LISTA_PASSEIOS,
+    CIDADE_TESTE, LISTA_TESTE_PASSEIOS,
 )
 
 
-def listar_hoteis(client):
+def listar_hoteis(client) -> bool:
     resp = client.get(LISTAR_HOTEIS.format(cidade=CIDADE_TESTE))
-    encontrados = resp.json()
-    assert resp.status_code == 200
-    assert encontrados
-    assert encontrados[0]['nome'] == HOTEL_TESTE
+    nomes = [r['nome'] for r in resp.json()]
+    return nomes == [HOTEL_TESTE]
 
-def listar_passeios(client):
+def listar_passeios(client) -> bool:
     resp = client.get(LISTAR_PASSEIOS.format(cidade=CIDADE_TESTE))
-    encontrados = resp.json()
-    assert resp.status_code == 200
-    nomes = [e['nome'] for e in encontrados]
-    assert nomes == LISTA_PASSEIOS
+    nomes = [r['nome'] for r in resp.json()]
+    return sorted(nomes) == sorted(LISTA_TESTE_PASSEIOS)
 
 def passeios_por_data(client):
     resp = client.get(LISTAR_PASSEIOS_POR_DATA.format(
         cidade=CIDADE_TESTE, data='01-12-2022'
     ))
-    encontrados = resp.json()
-    assert resp.status_code == 200
-    assert encontrados
-    assert encontrados[0]['nome'] == ITEM_PASSEIO_GRUTA
+    nomes = [r['nome'] for r in resp.json()]
+    return nomes == [ITEM_PASSEIO_GRUTA]

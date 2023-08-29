@@ -1,7 +1,7 @@
 from modelos.base import Reserva
 from testes.const import (
     CIDADE_TESTE, HOSPEDE_TESTE, HOTEL_TESTE,
-    LISTA_PASSEIOS, ITEM_PASSEIO_PARQUE
+    LISTA_TESTE_PASSEIOS, ITEM_PASSEIO_PARQUE
 )
 from rotas.const import (
     RESERVA_PACOTE, CONSUMIR_PACOTE,
@@ -9,23 +9,24 @@ from rotas.const import (
 )
 
 
-def fazer_reserva(client):
+def fazer_reserva(client) -> bool:
     dados = Reserva(
         cidade=CIDADE_TESTE, hospede=HOSPEDE_TESTE,
-        hotel=HOTEL_TESTE, passeios=','.join(LISTA_PASSEIOS),
+        hotel=HOTEL_TESTE, passeios=','.join(LISTA_TESTE_PASSEIOS),
     )
     resp = client.post(
         RESERVA_PACOTE,
         json=dados.model_dump()
     )
-    assert resp.status_code == 200
+    return resp.status_code == 200
 
-def consumir_pacote(client):
+def consumir_pacote(client) -> bool:
     resp = client.post(CONSUMIR_PACOTE.format(
         hospede=HOSPEDE_TESTE
     ))
-    assert resp.status_code == 200
+    if resp.status_code == 404:
+        return False
     esperado = FORMATO_RETORNO_CONSUMO.format(
         HOSPEDE_TESTE, ITEM_PASSEIO_PARQUE
     )
-    assert resp.json() == esperado
+    return resp.json() == esperado
