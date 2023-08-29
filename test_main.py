@@ -15,7 +15,7 @@ client = TestClient(
 )
 # ---------------------------------
 # Comente a linha abaixo(*) caso queira gravar os testes no B.D.:
-# MongoTable._db = MockDatabase()  # <<<---- (*)
+MongoTable._db = MockDatabase()  # <<<---- (*)
 MongoTable.DATABASE_NAME = 'teste'
 # ---------------------------------
 
