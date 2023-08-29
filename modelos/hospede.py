@@ -1,7 +1,9 @@
+from datetime import datetime
 from modelos.mongo_table import MongoTable
 from modelos import base
 from modelos.base import STATUS_INATIVO, STATUS_HOSPEDADO
 from modelos.hotel import Hotel
+from modelos.passeio import Passeio
 
 
 class Hospede(MongoTable, base.Hospede):
@@ -10,12 +12,11 @@ class Hospede(MongoTable, base.Hospede):
         Primeiro procura o `hotel` do Hospede
         Depois retira um passeio da lista
         """
-        encontrado = Hotel.find(nome=self.hotel)
-        if not encontrado:
+        hotel = Hotel.find_first(nome=self.hotel)
+        if not hotel:
             raise ValueError('O hotel {} já não existe mais.'.format(
                 self.hotel
             ))
-        hotel = encontrado[0]
         if len(self.passeios) == 0:
             hotel.check_out(self.quarto)
             self.status = STATUS_INATIVO

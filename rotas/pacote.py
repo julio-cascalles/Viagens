@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException
-from modelos.base import Reserva, DIAS_SEMANA
+from modelos.base import Reserva
 from modelos.hotel import Hotel
 from modelos.passeio import Passeio
 from modelos.hospede import Hospede
 from rotas.const import (
     RESERVA_PACOTE, CONSUMIR_PACOTE,
-    FORMATO_RETORNO_CONSUMO
+    FORMATO_RETORNO_CONSUMO, OP_PCT_REALIZADO
 )
 
 
@@ -14,20 +14,23 @@ router = APIRouter()
 @router.post(RESERVA_PACOTE)
 def fazer_reserva(dados: Reserva):
     """
+    `passeios` é uma lista (separada por vírgula)
+     dos passeios desejados
+     > Se for vazio, traz TODOS os passeiso da cidade!
+
     **Observação**
     O _hospede_ só passa a existir depois que faz a reserva.
     Então **não existe** uma rota do tipo `novo/hospede`
     """
-    encontrados = sorted(Passeio.find(
-        cidade=dados.cidade,
-        nome={'$in': dados.passeios.split(',')}
-    ), key = lambda p: DIAS_SEMANA.index(p.dia_semana))
+    encontrados = Passeio.amostra(dados)
     if not encontrados:
         raise HTTPException(
             status_code=404,
             detail='Nenhum passeio encontrado com essas características.'
         )
-    hotel = next(iter(Hotel.find(nome=dados.hotel, cidade=dados.cidade)), None)
+    hotel = Hotel.find_first(
+        nome=dados.hotel, cidade=dados.cidade
+    )
     if hotel:
         quarto = hotel.reserva(dados.hospede)
         if quarto == -1:
@@ -52,10 +55,13 @@ def fazer_reserva(dados: Reserva):
     return f'Quarto {quarto} reservado com sucesso para {dados.hospede}'
 
 @router.post(CONSUMIR_PACOTE)
-def consumir_pacote(hospede: str, realizar: int=1):
+def consumir_pacote(hospede: str, operacao: str=OP_PCT_REALIZADO):
     """
     Simula o hóspede consumindo seu pacote de passeios
-    > Coloque `realizar` como 0 caso queira desistir do passeio
+    Valores possíveis para o campos `operacao`:
+    * _realizado_ (default) = Assume que o hóspede realizou o passeio
+    * _cancelou_ :  Quando ele desistiu do passeio
+    * _hoje_ : Realiza o passeio na data atual
     """
     encontrado = Hospede.find(nome=hospede)
     if not encontrado:
@@ -64,10 +70,13 @@ def consumir_pacote(hospede: str, realizar: int=1):
             detail=f'Hóspede "{hospede}" não encontrado.'
         )
     hospede = encontrado[0]
-    return FORMATO_RETORNO_CONSUMO.format(
-        hospede.nome, 
-        Passeio.historico_gravado(
-            nome=hospede.proximo_passeio(),
-            hospede=hospede, cancelado=(realizar==0)
+    try:
+        return FORMATO_RETORNO_CONSUMO.format(
+            hospede.nome, 
+            Passeio.historico_gravado(
+                nome=hospede.proximo_passeio(),
+                hospede=hospede, operacao=operacao
+            )
         )
-    )
+    except Exception as e:
+        return str(e)

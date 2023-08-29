@@ -27,3 +27,7 @@ class MongoTable:
     @classmethod
     def find(cls, **args) -> list:
         return [cls(**o) for o in cls.collection().find(filter=args)]
+
+    @classmethod
+    def find_first(cls, **args):
+        return next(iter(cls.find(**args)), None)

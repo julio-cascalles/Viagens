@@ -15,3 +15,7 @@ SUCESSO_HOTEL = 'Hotel gravado com sucesso!'
 SUCESSO_PASSEIO = 'Passeio gravado com sucesso!'
 
 FORMATO_RETORNO_CONSUMO = '{} > {}.'
+
+OP_PCT_REALIZADO = 'realizado'
+OP_CANCELOU_PCT = 'cancelou'
+OP_PACOTE_HOJE = 'hoje'
