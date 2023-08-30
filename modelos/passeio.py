@@ -2,7 +2,7 @@ from datetime import datetime
 from modelos import base
 from modelos.base import DIAS_SEMANA, Reserva
 from modelos.mongo_table import MongoTable
-from rotas.const import OP_PACOTE_HOJE
+from rotas.const import OP_PACOTE_HOJE, OP_PCT_REALIZADO
 
 
 class Passeio(MongoTable, base.Passeio):
@@ -28,7 +28,7 @@ class Passeio(MongoTable, base.Passeio):
                 raise ValueError('{} só estará disponível {}'.format(
                     passeio.nome, passeio.dia_semana
                 ))
-            operacao = 'realizar'
+            operacao = OP_PCT_REALIZADO
         passeio.historico[hospede] = operacao
         passeio.save()
         return passeio.nome

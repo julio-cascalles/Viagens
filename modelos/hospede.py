@@ -34,9 +34,7 @@ class Hospede(MongoTable, base.Hospede):
 
     @classmethod
     def hotel_atual(cls, nome: str) -> str:
-        encontrado = cls.find(nome=nome)
-        if encontrado:
-            hospede = encontrado[0]
-            if hospede.status == STATUS_HOSPEDADO:
-                return hospede.hotel
+        hospede = cls.find_first(nome=nome)
+        if hospede and hospede.status == STATUS_HOSPEDADO:
+            return hospede.hotel
         return ''
