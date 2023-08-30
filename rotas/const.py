@@ -10,6 +10,7 @@ CONSUMIR_PACOTE = '/pacote/consumir/{hospede}'
 LISTAR_HOTEIS = '/pesquisas/listar_hoteis/{cidade}'
 LISTAR_PASSEIOS = '/pesquisas/listar_passeios/{cidade}'
 LISTAR_PASSEIOS_POR_DATA = '/pesquisas/listar_passeios/{cidade}/{data}'
+EXCLUIR_HOSPEDES_INATIVOS = '/hospedes/limpar_inativos'
 
 SUCESSO_HOTEL = 'Hotel gravado com sucesso!'
 SUCESSO_PASSEIO = 'Passeio gravado com sucesso!'
@@ -19,3 +20,4 @@ FORMATO_RETORNO_CONSUMO = '{} > {}.'
 OP_PCT_REALIZADO = 'realizado'
 OP_CANCELOU_PCT = 'cancelou'
 OP_PACOTE_HOJE = 'hoje'
+OPERACOES_POSSIVEIS = [OP_PCT_REALIZADO, OP_CANCELOU_PCT, OP_PACOTE_HOJE]

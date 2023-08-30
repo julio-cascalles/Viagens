@@ -5,7 +5,8 @@ from modelos.passeio import Passeio
 from modelos.hospede import Hospede
 from rotas.const import (
     RESERVA_PACOTE, CONSUMIR_PACOTE,
-    FORMATO_RETORNO_CONSUMO, OP_PCT_REALIZADO
+    FORMATO_RETORNO_CONSUMO, OP_PCT_REALIZADO,
+    OPERACOES_POSSIVEIS
 )
 
 
@@ -31,25 +32,24 @@ def fazer_reserva(dados: Reserva):
     hotel = Hotel.find_first(
         nome=dados.hotel, cidade=dados.cidade
     )
-    if hotel:
+    outro_hotel = Hospede.hotel_atual(dados.hospede)
+    if outro_hotel:
+        erro = '{} já está hospedado em {}'.format(
+            dados.hospede, outro_hotel
+        )
+    elif not hotel:
+        erro = 'Hotel não encontrado.'
+    else:
         quarto = hotel.reserva(dados.hospede)
         if quarto == -1:
             erro = 'Não foi possível fazer a reserva nesse hotel.'
         else:
-            outro_hotel = Hospede.hotel_atual(dados.hospede)
-            if outro_hotel:
-                erro = '{} já está hospedado em {}'.format(
-                    dados.hospede, outro_hotel
-                )
-            else:
-                Hospede(
-                    nome=dados.hospede, quarto=quarto,
-                    passeios=[p.nome for p in encontrados],
-                    hotel=hotel.nome, 
-                ).save()
-                erro = ''
-    else:
-        erro = 'Hotel não encontrado.'
+            Hospede(
+                nome=dados.hospede, quarto=quarto,
+                passeios=[p.nome for p in encontrados],
+                hotel=hotel.nome, 
+            ).save()
+            erro = ''
     if erro:
         raise HTTPException(status_code=400, detail=erro)
     return f'Quarto {quarto} reservado com sucesso para {dados.hospede}'
@@ -63,6 +63,8 @@ def consumir_pacote(hospede: str, operacao: str=OP_PCT_REALIZADO):
     * _cancelou_ :  Quando ele desistiu do passeio
     * _hoje_ : Realiza o passeio na data atual
     """
+    if operacao not in OPERACOES_POSSIVEIS:
+        raise HTTPException(status_code=400, detail='Operação inválida')
     encontrado = Hospede.find(nome=hospede)
     if not encontrado:
         raise HTTPException(

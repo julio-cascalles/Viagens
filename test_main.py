@@ -1,7 +1,7 @@
+import uuid
 from fastapi.testclient import TestClient
 from rotas.app import create_app
 from modelos.mongo_table import MongoTable
-from testes.utils import MockDatabase
 from testes.novos import novo_hotel, novos_passeios
 from testes.pacote import fazer_reserva, consumir_pacote
 from testes.pesquisas import (
@@ -9,19 +9,16 @@ from testes.pesquisas import (
     listar_passeios,
     passeios_por_data
 )
+from testes.limpeza import limpar_inativos
 
 client = TestClient(
     create_app()
 )
-# ---------------------------------
-# Comente a linha abaixo(*) caso queira gravar os testes no B.D.:
-MongoTable._db = MockDatabase()  # <<<---- (*)
-MongoTable.DATABASE_NAME = 'teste'
-# ---------------------------------
+MongoTable.DATABASE_NAME = 'teste_' + str(uuid.uuid4())
 
 rotinas = [
     novo_hotel, listar_hoteis, novos_passeios, listar_passeios,
-    passeios_por_data, fazer_reserva, consumir_pacote, 
+    passeios_por_data, fazer_reserva, consumir_pacote, limpar_inativos
 ]
 resultado = {func.__name__: func(client) for func in rotinas}
 
@@ -46,3 +43,6 @@ def test_fazer_reserva():
 
 def test_consumir_pacote():
     assert resultado['consumir_pacote']
+
+def test_limpar_inativos():
+    assert resultado['limpar_inativos']

@@ -31,3 +31,7 @@ class MongoTable:
     @classmethod
     def find_first(cls, **args):
         return next(iter(cls.find(**args)), None)
+
+    @classmethod
+    def delete(cls, **args):
+        return cls.collection().delete_many(args)
