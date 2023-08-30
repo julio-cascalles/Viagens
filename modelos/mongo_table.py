@@ -1,7 +1,8 @@
+TEST_DATABASE = 'test'
+
 class MongoTable:
     URL_HOST = 'mongodb://localhost:27017/'
     DATABASE_NAME = ''
-
     _db = None
 
     @classmethod
@@ -9,6 +10,8 @@ class MongoTable:
         if MongoTable._db is None:
             from pymongo import MongoClient
             conn = MongoClient(cls.URL_HOST, connect=False)
+            if cls.DATABASE_NAME == TEST_DATABASE:
+                conn.drop_database(cls.DATABASE_NAME)
             MongoTable._db = conn[cls.DATABASE_NAME]
         return MongoTable._db.get_collection(cls.__name__)
 

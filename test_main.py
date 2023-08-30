@@ -1,7 +1,6 @@
-import uuid
 from fastapi.testclient import TestClient
 from rotas.app import create_app
-from modelos.mongo_table import MongoTable
+from modelos.mongo_table import MongoTable, TEST_DATABASE
 from testes.novos import novo_hotel, novos_passeios
 from testes.pacote import fazer_reserva, consumir_pacote
 from testes.pesquisas import (
@@ -14,7 +13,7 @@ from testes.limpeza import limpar_inativos
 client = TestClient(
     create_app()
 )
-MongoTable.DATABASE_NAME = 'teste_' + str(uuid.uuid4())
+MongoTable.DATABASE_NAME = TEST_DATABASE
 
 rotinas = [
     novo_hotel, listar_hoteis, novos_passeios, listar_passeios,
