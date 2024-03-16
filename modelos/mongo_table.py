@@ -1,14 +1,18 @@
+from pymongo import MongoClient
+from pymongo.database import Database
+from pymongo.collection import Collection
+
+
 TEST_DATABASE = 'test'
 
 class MongoTable:
     URL_HOST = 'mongodb://localhost:27017/'
     DATABASE_NAME = ''
-    _db = None
+    _db: Database = None
 
     @classmethod
-    def collection(cls):
+    def collection(cls) -> Collection:
         if MongoTable._db is None:
-            from pymongo import MongoClient
             conn = MongoClient(cls.URL_HOST, connect=False)
             if cls.DATABASE_NAME == TEST_DATABASE:
                 conn.drop_database(cls.DATABASE_NAME)
@@ -29,11 +33,14 @@ class MongoTable:
 
     @classmethod
     def find(cls, **args) -> list:
-        return [cls(**o) for o in cls.collection().find(filter=args)]
+        return [
+            cls(**cursor) for cursor in cls.collection().find(filter=args)
+        ]
 
     @classmethod
     def find_first(cls, **args):
-        return next(iter(cls.find(**args)), None)
+        cursor = cls.collection().find(filter=args).limit(-1)
+        return cls(**cursor)
 
     @classmethod
     def delete(cls, **args):
